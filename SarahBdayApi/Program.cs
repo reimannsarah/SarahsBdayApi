@@ -1,18 +1,33 @@
 using SarahBdayApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
 builder.Services.AddDbContext<SarahBdayApiContext>(
-                dbContextOptions => dbContextOptions
-                    .UseMySql(
-                        builder.Configuration["ConnectionStrings:AZURE_SQL_CONNECTION"],
-                        ServerVersion.AutoDetect(builder.Configuration["ConnectionStrings:AZURE_SQL_CONNECTION"])
-                    )
-);
+                    dbContextOptions => dbContextOptions
+                        .UseMySql(
+                        builder.Configuration["ConnectionStrings:AZURE_SQL_CONNECTION"], 
+                        ServerVersion.AutoDetect(
+                            builder.Configuration["ConnectionStrings:AZURE_SQL_CONNECTION"]
+                        )
+                        )
+                    );
+
+builder.Services.AddCors(options => 
+{
+    options.AddDefaultPolicy(builder => 
+    {
+        builder.AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowAnyOrigin();
+    });
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -32,5 +47,7 @@ else
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors();
 
 app.Run();
