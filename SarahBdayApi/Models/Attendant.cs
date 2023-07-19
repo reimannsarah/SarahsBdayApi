@@ -5,6 +5,7 @@ namespace SarahBdayApi.Models
     public int AttendantId { get; set; }
     public string Name { get; set; }
     public string Email { get; set; }
-    public bool PlusOne { get; set; }
+    public string Sepcies { get; set; }
+    public string DoYouBelieve { get; set; }
   }
 }
